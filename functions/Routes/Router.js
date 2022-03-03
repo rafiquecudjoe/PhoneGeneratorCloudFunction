@@ -13,9 +13,42 @@ admin.initializeApp({
 const Router = express()
 
 const database = admin.database()
-const userRef = database.ref('/unusedNumbers')
+const userRef1 = database.ref('/unusedNumbers')
+const userRef2 = database.ref('/nonWorkingNumbers')
+const userRef3 = database.ref('/workingNumbers')
 
 
+Router.post('/api/add-NonWorkingNumber',async (req, res) => {
+
+     const {number} = req.body
+      const id = userRef2.push().key
+       await  userRef2.child(id).set({
+            phoneNumber: number,
+            unused:true
+       })   
+    
+      res.status(200).json({
+        message: "success",
+        
+    })
+  
+})
+
+Router.post('/api/add-WorkingNumber',async (req, res) => {
+
+     const {number} = req.body
+      const id = userRef3.push().key
+       await  userRef3.child(id).set({
+            phoneNumber: number,
+            unused:true
+       })   
+    
+      res.status(200).json({
+        message: "success",
+        
+    })
+  
+})
 
 
 
@@ -23,7 +56,7 @@ const userRef = database.ref('/unusedNumbers')
 Router.get('/api/get-phoneNumber', (req, res) => {
 
     let data;
-    userRef.orderByKey().limitToFirst(1).on('value', snapshot => {
+    userRef1.orderByKey().limitToFirst(1).on('value', snapshot => {
         data = (snapshot.val())
     })
 
@@ -58,8 +91,8 @@ Router.post("/api/add-phoneNumbers", async (req, res) => {
     console.log(response.sid,value)
 
         
-        const id = userRef.push().key
-       await  userRef.child(id).set({
+        const id = userRef1.push().key
+       await  userRef1.child(id).set({
             phoneNumber: value,
             unused:true
        })   
