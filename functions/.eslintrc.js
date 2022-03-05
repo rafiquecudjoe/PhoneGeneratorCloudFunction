@@ -5,13 +5,13 @@ module.exports = {
     es2021: true,
   },
   extends: [
-    'airbnb-base',
+    "airbnb-base",
   ],
   parserOptions: {
-    ecmaVersion: 'latest',
+    ecmaVersion: "latest",
   },
   rules: {
-       "semi": ["error", "always"],
-        "quotes": ["error", "double"]
+    semi: ["error", "always"],
+    quotes: ["error", "double"],
   },
 };
