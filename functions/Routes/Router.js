@@ -1,9 +1,9 @@
 const express = require("express");
 const admin = require("firebase-admin");
 
-// const accountSid = "AC0d8955873324a1520e5d41c29032e7d1";
-// const authToken = "382f6bb4260a7ae2ddd809731bcb8e8f";
-// const client = require("twilio")(accountSid, authToken);
+const accountSid =process.env.TWILIO_ACCOUNT_SID;
+const authToken  =process.env.TWILIO_TOKEN
+const client = require("twilio")(accountSid, authToken);
 
 admin.initializeApp({
   credential: admin.credential.applicationDefault(),
@@ -93,35 +93,40 @@ Router.get("/api/get-phoneNumber", (req, res) => {
 });
 
 Router.post("/api/add-phoneNumbers", async (req, res) => {
-  try {
-    const phoneNumbers = req.body;
+  //try {
+  
+  const phoneNumbers = req.body;
+  
+client.messages
+.create({body: 'Hi there', from: '+15017122661', to: '+15558675310'})
+.then(message => console.log(message.sid)); 
 
-    /* eslint-disable-next-line */
-    for (const value of phoneNumbers) {
-      //             try {
-      //                  response = await client.messages.create({
-      //      body: 'This is the ship that made the Kessel Run in fourteen parsecs?',
-      //      from: '+19108125708',
-      //      to: value
-      //    })
-
-      //             } catch (error) {
-      //                 console.log(error)
-      //             }
-
-      const id = userRef1.push().key;
+   await Promise.all(
+     phoneNumbers.map(async (item) => {
+        
+     await  client.messages
+.create({body: 'Hi there', from: '+19108125708', to: item})
+       .then(message =>   
+        
+       { const id = userRef1.push().key;
       userRef1.child(id).set({
-        phoneNumber: value,
+        phoneNumber: item,
         unused: true,
-      });
-    }
-  } catch (error) {
-    console.log(error);
-  }
+      });}
+      
+      
+      )
+       .catch(error => console.log(error))
+   
+       
+    
+      }),
+    );
+
 
   return res.status(200).json({
     message: "Phone Numbers added Successfully",
-  });
+  }); 
 });
 
 module.exports = Router;
